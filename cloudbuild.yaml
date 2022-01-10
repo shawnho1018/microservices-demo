@@ -24,14 +24,22 @@
 # `gcloud builds submit --config=cloudbuild.yaml --substitutions=_ZONE=us-central1-b,_CLUSTER=demo-app-staging .`
 
 steps:
-- id: 'Deploy application to cluster'
+- id: 'buildImage'
   name: 'gcr.io/k8s-skaffold/skaffold:v1.35.1'
   entrypoint: 'bash'
   args:
   - '-c'
   - >
-    skaffold build -p uat
-
+    skaffold build -p uat --file-output=tags.json
+- id: 'deployWorkload'
+  name: 'gcr.io/k8s-skaffold/skaffold:v1.35.1'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - >
+    skaffold deploy -p uat --build-artifacts=tags.json
+  waitFor:
+    - buildImage
 # Add more power, and more time, for heavy Skaffold build
 timeout: '3600s'
 options:

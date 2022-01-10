@@ -81,7 +81,3 @@ build:
   artifacts:
   - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/loadgenerator
     context: src/loadgenerator
-deploy:
-  kubectl:
-    manifests:
-    - ./kubernetes-manifests/loadgenerator.yaml
