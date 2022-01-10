@@ -51,7 +51,7 @@ profiles:
     - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/adservice
       context: src/adservice
     tagPolicy:
-      gitCommit: {}
+      sha256: {}
   deploy:
     kustomize:
       paths:
@@ -81,3 +81,5 @@ build:
   artifacts:
   - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/loadgenerator
     context: src/loadgenerator
+  tagPolicy:
+    sha256: {}
