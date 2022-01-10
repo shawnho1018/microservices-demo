@@ -30,7 +30,7 @@ steps:
   args:
   - '-c'
   - >
-    skaffold build --profiles hipster
+    skaffold build -p uat
 
 # Add more power, and more time, for heavy Skaffold build
 timeout: '3600s'
