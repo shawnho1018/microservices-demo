@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cartservice
+spec:
+  template:
+    spec:
+      containers:
+      - name: server
+        image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/cartservice
+        ports:
+        - containerPort: 7070      
+        env:
+        - name: REDIS_ADDR
+          value: "redis-cart-uat:6379"

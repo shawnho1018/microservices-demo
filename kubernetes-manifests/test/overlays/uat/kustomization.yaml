@@ -1,0 +1,8 @@
+nameSuffix: "-uat"
+namespace: uat
+commonLabels:
+  app: hipster-uat
+bases:
+- ../../base
+patches:
+- cart-patch.yaml
