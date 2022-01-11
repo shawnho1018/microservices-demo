@@ -1,0 +1,29 @@
+# nameSuffix: "-prod"
+namespace: prod
+commonLabels:
+  env: prod
+bases:
+- ../../base
+patches:
+- service-type.yaml
+# - cart-envs-patch.yaml
+# - frontend-envs-patch.yaml
+# images:
+# - name: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/adservice
+#   digest: replace
+# - name: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/cartservice
+#   digest: replace
+# - name: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/checkoutservice
+#   digest: replace
+# - name: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/currencyservice
+#   digest: replace
+# - name: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/emailservice
+#   digest: replace
+# - name: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/frontend
+#   digest: replace
+# - name: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/loadgenerator
+#   digest: replace
+# - name: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/paymentservice
+#   digest: replace
+# - name: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/productcatalogservice
+#   digest: replace

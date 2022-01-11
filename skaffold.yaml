@@ -57,14 +57,12 @@ profiles:
       paths:
       - kubernetes-manifests/overlays/uat
     kubeContext: gke_shawn-demo-2022_asia-east1-a_production
-- name: debug
-  activation:
-    - command: debug
-  patches:
-    - op: replace
-      path: /build/artifacts/7/docker/dockerfile
-      value: Dockerfile.debug
-
+- name: prod
+  deploy:
+    kustomize:
+      paths:
+      - kubernetes-manifests/overlays/prod
+    kubeContext: gke_shawn-demo-2022_asia-east1-a_production
 ---
 apiVersion: skaffold/v2beta16
 kind: Config
