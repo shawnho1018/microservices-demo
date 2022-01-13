@@ -6,6 +6,7 @@ bases:
 - ../../base
 resources:
 - frontend-vs.yaml
+- auth-policy.yaml
 patches:
 - service-type.yaml
 - namespace-type.yaml
