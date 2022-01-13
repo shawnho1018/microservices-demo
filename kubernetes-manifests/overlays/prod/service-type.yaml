@@ -3,4 +3,4 @@ kind: "Service"
 metadata:
   name: frontend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
