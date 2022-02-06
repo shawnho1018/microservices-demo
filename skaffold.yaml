@@ -16,53 +16,53 @@ apiVersion: skaffold/v2beta16
 kind: Config
 metadata:
   name: hipster
+build:
+  googleCloudBuild:
+    diskSizeGb: 300
+    machineType: N1_HIGHCPU_32
+    timeout: 4000s
+  artifacts:
+  # image tags are relative; to specify an image repo (e.g. GCR), you
+  # must provide a "default repo" using one of the methods described
+  # here:
+  # https://skaffold.dev/docs/concepts/#image-repository-handling
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/emailservice
+    context: src/emailservice
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/productcatalogservice
+    context: src/productcatalogservice
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/recommendationservice
+    context: src/recommendationservice
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/shippingservice
+    context: src/shippingservice
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/checkoutservice
+    context: src/checkoutservice
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/paymentservice
+    context: src/paymentservice
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/currencyservice
+    context: src/currencyservice
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/cartservice
+    context: src/cartservice/src
+    docker:
+      dockerfile: Dockerfile
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/frontend
+    context: src/frontend
+  - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/adservice
+    context: src/adservice
+  tagPolicy:
+    sha256: {}
 profiles:
 - name: uat
-  build:
-    googleCloudBuild:
-      diskSizeGb: 300
-      machineType: N1_HIGHCPU_32
-      timeout: 4000s
-    artifacts:
-    # image tags are relative; to specify an image repo (e.g. GCR), you
-    # must provide a "default repo" using one of the methods described
-    # here:
-    # https://skaffold.dev/docs/concepts/#image-repository-handling
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/emailservice
-      context: src/emailservice
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/productcatalogservice
-      context: src/productcatalogservice
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/recommendationservice
-      context: src/recommendationservice
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/shippingservice
-      context: src/shippingservice
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/checkoutservice
-      context: src/checkoutservice
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/paymentservice
-      context: src/paymentservice
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/currencyservice
-      context: src/currencyservice
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/cartservice
-      context: src/cartservice/src
-      docker:
-        dockerfile: Dockerfile
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/frontend
-      context: src/frontend
-    - image: asia-east1-docker.pkg.dev/shawn-demo-2022/image-repos/adservice
-      context: src/adservice
-    tagPolicy:
-      sha256: {}
   deploy:
     kustomize:
       paths:
       - kubernetes-manifests/overlays/uat
-    kubeContext: gke_shawn-demo-2022_asia-east1-a_production
+    kubeContext: gke_shawn-demo-2022_asia-east1-a_private-gke-tw
 - name: prod
   deploy:
     kustomize:
       paths:
       - kubernetes-manifests/overlays/prod
-    kubeContext: gke_shawn-demo-2022_asia-east1-a_production
+    kubeContext: gke_shawn-demo-2022_asia-east1-a_private-gke-tw
 ---
 apiVersion: skaffold/v2beta16
 kind: Config

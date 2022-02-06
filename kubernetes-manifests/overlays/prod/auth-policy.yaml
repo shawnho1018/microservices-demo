@@ -13,6 +13,12 @@ spec:
     name: sample-ext-authz-http
   rules:
   # The rules specify when to trigger the external authorizer.
-  - to:
+  - from:
+    - source:
+        ipBlocks:
+          - "36.226.175.159/32"
+        remoteIpBlocks:
+          - "36.226.175.159/32"
+    to:
     - operation:
         paths: ["/cart", "/product/*"]

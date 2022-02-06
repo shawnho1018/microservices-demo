@@ -17,8 +17,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"net"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/profiler"
@@ -142,7 +145,7 @@ func main() {
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	r.HandleFunc("/robots.txt", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "User-agent: *\nDisallow: /") })
 	r.HandleFunc("/_healthz", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "ok") })
-
+	r.HandleFunc("/getIP", handleIP)
 	var handler http.Handler = r
 	handler = &logHandler{log: log, next: handler} // add logging
 	handler = ensureSessionID(handler)             // add session ID
@@ -152,6 +155,49 @@ func main() {
 
 	log.Infof("starting server on " + addr + ":" + srvPort)
 	log.Fatal(http.ListenAndServe(addr+":"+srvPort, handler))
+}
+func handleIP(w http.ResponseWriter, r *http.Request) {
+	ip, err := getIP(r)
+	if err != nil {
+		w.WriteHeader(400)
+		w.Write([]byte("No valid ip"))
+	}
+	w.WriteHeader(200)
+	w.Write([]byte(ip))
+}
+func getIP(r *http.Request) (string, error) {
+	//Get IP from the X-REAL-IP header
+	ip := r.Header.Get("X-REAL-IP")
+	//Get IP from X-FORWARDED-FOR header
+	ips := r.Header.Get("X-FORWARDED-FOR")
+	//Get IP from RemoteAddr
+	ipr, _, err := net.SplitHostPort(r.RemoteAddr)
+	log.Printf("X-REAL, X-Forward, Remote: %s, %s, %s", ip, ips, ipr)
+	netIP := net.ParseIP(ip)
+	if netIP != nil {
+		log.Printf("X-REAL-IP: %s", netIP)
+		return ip, nil
+	}
+	splitIps := strings.Split(ips, ",")
+	for _, ip := range splitIps {
+		netIP := net.ParseIP(ip)
+		if netIP != nil {
+			log.Printf("X-FORWADER-IP: %s", netIP)
+			return ip, nil
+		}
+	}
+
+	//Get IP from RemoteAddr
+	//ipr, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return "", err
+	}
+	netIP = net.ParseIP(ipr)
+	if netIP != nil {
+		log.Printf("REMOTE-IP: %s", netIP)
+		return ipr, nil
+	}
+	return "", fmt.Errorf("No valid ip found")
 }
 
 func initJaegerTracing(log logrus.FieldLogger) {
