@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: base
   labels:
-    istio.io/rev: asm-managed  
+    istio.io/rev: asm-1122-0 #asm-managed  
