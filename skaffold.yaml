@@ -53,12 +53,14 @@ build:
 profiles:
 - name: uat
   deploy:
+    statusCheckDeadlineSeconds: 300
     kustomize:
       paths:
       - kubernetes-manifests/overlays/uat
     kubeContext: gke_shawn-demo-2022_asia-east1-a_private-gke-tw
 - name: prod
   deploy:
+    statusCheckDeadlineSeconds: 300
     kustomize:
       paths:
       - kubernetes-manifests/overlays/prod
